@@ -1,1 +1,144 @@
-import React, { useState } from 'react';\nimport './GameControls.css';\n\ninterface GameControlsProps {\n  gameActive: boolean;\n  autoCall: boolean;\n  callInterval: number;\n  calledNumbersCount: number;\n  onStartGame: (ticketCount: number) => void;\n  onCallNumber: () => void;\n  onToggleAutoCall: (auto: boolean) => void;\n  onIntervalChange: (interval: number) => void;\n  onResetGame: () => void;\n}\n\nconst GameControls: React.FC<GameControlsProps> = ({\n  gameActive,\n  autoCall,\n  callInterval,\n  calledNumbersCount,\n  onStartGame,\n  onCallNumber,\n  onToggleAutoCall,\n  onIntervalChange,\n  onResetGame\n}) => {\n  const [ticketCount, setTicketCount] = useState(4);\n  const [showSettings, setShowSettings] = useState(false);\n\n  return (\n    <div className=\"game-controls\">\n      <div className=\"main-controls\">\n        {!gameActive ? (\n          <div className=\"start-game-section\">\n            <div className=\"ticket-count-input\">\n              <label htmlFor=\"ticket-count\">Number of Tickets:</label>\n              <select \n                id=\"ticket-count\"\n                value={ticketCount} \n                onChange={(e) => setTicketCount(Number(e.target.value))}\n              >\n                <option value={1}>1</option>\n                <option value={2}>2</option>\n                <option value={3}>3</option>\n                <option value={4}>4</option>\n                <option value={6}>6</option>\n                <option value={8}>8</option>\n              </select>\n            </div>\n            <button \n              className=\"start-button\" \n              onClick={() => onStartGame(ticketCount)}\n            >\n              🎮 Start New Game\n            </button>\n          </div>\n        ) : (\n          <div className=\"active-game-controls\">\n            <button \n              className=\"call-button\"\n              onClick={onCallNumber}\n              disabled={autoCall}\n            >\n              📢 Call Next Number\n            </button>\n            \n            <button \n              className=\"auto-toggle-button\"\n              onClick={() => onToggleAutoCall(!autoCall)}\n            >\n              {autoCall ? '⏸️ Stop Auto Call' : '▶️ Auto Call'}\n            </button>\n            \n            <button \n              className=\"settings-button\"\n              onClick={() => setShowSettings(!showSettings)}\n            >\n              ⚙️ Settings\n            </button>\n            \n            <button \n              className=\"reset-button\"\n              onClick={onResetGame}\n            >\n              🔄 Reset Game\n            </button>\n          </div>\n        )}\n      </div>\n\n      {showSettings && gameActive && (\n        <div className=\"settings-panel\">\n          <div className=\"setting-item\">\n            <label htmlFor=\"call-interval\">Auto Call Interval (seconds):</label>\n            <select \n              id=\"call-interval\"\n              value={callInterval / 1000} \n              onChange={(e) => onIntervalChange(Number(e.target.value) * 1000)}\n            >\n              <option value={1}>1</option>\n              <option value={2}>2</option>\n              <option value={3}>3</option>\n              <option value={5}>5</option>\n              <option value={10}>10</option>\n            </select>\n          </div>\n          \n          <div className=\"game-info\">\n            <span>Numbers Remaining: {90 - calledNumbersCount}</span>\n            <span>Progress: {Math.round((calledNumbersCount / 90) * 100)}%</span>\n          </div>\n        </div>\n      )}\n    </div>\n  );\n};\n\nexport default GameControls;
+import React, { useState } from 'react';
+import './GameControls.css';
+
+interface GameControlsProps {
+  gameActive: boolean;
+  autoCall: boolean;
+  callInterval: number;
+  calledNumbersCount: number;
+  showTickets: boolean;
+  onStartGame: (ticketCount: number, generateTickets: boolean) => void;
+  onCallNumber: () => void;
+  onToggleAutoCall: (auto: boolean) => void;
+  onIntervalChange: (interval: number) => void;
+  onToggleTickets: (show: boolean) => void;
+  onResetGame: () => void;
+}
+
+const GameControls: React.FC<GameControlsProps> = ({
+  gameActive,
+  autoCall,
+  callInterval,
+  calledNumbersCount,
+  showTickets,
+  onStartGame,
+  onCallNumber,
+  onToggleAutoCall,
+  onIntervalChange,
+  onToggleTickets,
+  onResetGame
+}) => {
+  const [ticketCount, setTicketCount] = useState(4);
+  const [showSettings, setShowSettings] = useState(false);
+
+  return (
+    <div className="game-controls">
+      <div className="main-controls">
+        {!gameActive ? (
+          <div className="start-game-section">
+            <div className="game-mode-toggle">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showTickets}
+                  onChange={(e) => onToggleTickets(e.target.checked)}
+                />
+                Show Practice Tickets (for players)
+              </label>
+            </div>
+            
+            {showTickets && (
+              <div className="ticket-count-input">
+                <label htmlFor="ticket-count">Number of Tickets:</label>
+                <select 
+                  id="ticket-count"
+                  value={ticketCount} 
+                  onChange={(e) => setTicketCount(Number(e.target.value))}
+                >
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
+                  <option value={8}>8</option>
+                </select>
+              </div>
+            )}
+            
+            <button 
+              className="start-button" 
+              onClick={() => onStartGame(ticketCount, showTickets)}
+            >
+              🎮 Start New Game
+            </button>
+            
+            <div className="mode-description">
+              <p>
+                {showTickets 
+                  ? "Host mode with practice tickets - Use this when players don't have physical tickets"
+                  : "Host-only mode - Use this when players have their own physical tickets"}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="active-game-controls">
+            <button 
+              className="call-button"
+              onClick={onCallNumber}
+              disabled={autoCall}
+            >
+              📢 Call Next Number
+            </button>
+            
+            <button 
+              className="auto-toggle-button"
+              onClick={() => onToggleAutoCall(!autoCall)}
+            >
+              {autoCall ? '⏸️ Stop Auto Call' : '▶️ Auto Call'}
+            </button>
+            
+            <button 
+              className="settings-button"
+              onClick={() => setShowSettings(!showSettings)}
+            >
+              ⚙️ Settings
+            </button>
+            
+            <button 
+              className="reset-button"
+              onClick={onResetGame}
+            >
+              🔄 Reset Game
+            </button>
+          </div>
+        )}
+      </div>
+
+      {showSettings && gameActive && (
+        <div className="settings-panel">
+          <div className="setting-item">
+            <label htmlFor="call-interval">Auto Call Interval (seconds):</label>
+            <select 
+              id="call-interval"
+              value={callInterval / 1000} 
+              onChange={(e) => onIntervalChange(Number(e.target.value) * 1000)}
+            >
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+            </select>
+          </div>
+          
+          <div className="game-info">
+            <span>Numbers Remaining: {90 - calledNumbersCount}</span>
+            <span>Progress: {Math.round((calledNumbersCount / 90) * 100)}%</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GameControls;

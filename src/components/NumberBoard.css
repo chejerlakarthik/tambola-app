@@ -1,0 +1,155 @@
+.number-board {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #333;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.number-board h3 {
+  text-align: center;
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.4em;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 3px;
+  margin-bottom: 20px;
+}
+
+.board-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.board-cell.pending {
+  background: #f8f9fa;
+  color: #6c757d;
+  border-color: #dee2e6;
+}
+
+.board-cell.called {
+  background: #28a745;
+  color: white;
+  border-color: #1e7e34;
+  transform: scale(0.95);
+}
+
+.board-cell.current {
+  background: #ff6b35;
+  color: white;
+  border-color: #e55100;
+  transform: scale(1.1);
+  animation: pulse 1s infinite;
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1.1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1.1); }
+}
+
+.board-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #dee2e6;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.legend-color.pending {
+  background: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.legend-color.called {
+  background: #28a745;
+  border-color: #1e7e34;
+}
+
+.legend-color.current {
+  background: #ff6b35;
+  border-color: #e55100;
+}
+
+.legend-item span {
+  font-size: 0.85em;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .number-board {
+    padding: 15px;
+    margin: 15px 10px;
+  }
+  
+  .board-grid {
+    grid-template-columns: repeat(10, 1fr);
+    gap: 2px;
+  }
+  
+  .board-cell {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8em;
+  }
+  
+  .board-legend {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .legend-item {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .board-grid {
+    grid-template-columns: repeat(10, 1fr);
+    gap: 1px;
+  }
+  
+  .board-cell {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7em;
+  }
+  
+  .number-board h3 {
+    font-size: 1.2em;
+  }
+}

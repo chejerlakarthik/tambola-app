@@ -1,1 +1,59 @@
-import React from 'react';\nimport { TambolaTicket, Winner } from '../types';\nimport './TambolaTicket.css';\n\ninterface TambolaTicketProps {\n  ticket: TambolaTicket;\n  winners: Winner[];\n}\n\nconst TambolaTicketComponent: React.FC<TambolaTicketProps> = ({ ticket, winners }) => {\n  const getWinTypeLabel = (winType: string): string => {\n    switch (winType) {\n      case 'early_five': return 'Early Five';\n      case 'top_line': return 'Top Line';\n      case 'middle_line': return 'Middle Line';\n      case 'bottom_line': return 'Bottom Line';\n      case 'four_corners': return 'Four Corners';\n      case 'full_house': return 'Full House';\n      default: return winType;\n    }\n  };\n\n  return (\n    <div className=\"tambola-ticket\">\n      <div className=\"ticket-header\">\n        <h3>{ticket.id}</h3>\n        {winners.length > 0 && (\n          <div className=\"winners-list\">\n            {winners.map((winner, index) => (\n              <span key={index} className={`win-badge ${winner.type}`}>\n                🏆 {getWinTypeLabel(winner.type)}\n              </span>\n            ))}\n          </div>\n        )}\n      </div>\n      \n      <div className=\"ticket-grid\">\n        {ticket.numbers.map((row, rowIndex) => (\n          <div key={rowIndex} className=\"ticket-row\">\n            {row.map((number, colIndex) => (\n              <div \n                key={`${rowIndex}-${colIndex}`} \n                className={`ticket-cell ${\n                  number === null ? 'empty' : \n                  ticket.striked[rowIndex][colIndex] ? 'striked' : 'number'\n                }`}\n              >\n                {number !== null ? number : ''}\n              </div>\n            ))}\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n};\n\nexport default TambolaTicketComponent;
+import React from 'react';
+import { TambolaTicket, Winner } from '../types';
+import './TambolaTicket.css';
+
+interface TambolaTicketProps {
+  ticket: TambolaTicket;
+  winners: Winner[];
+}
+
+const TambolaTicketComponent: React.FC<TambolaTicketProps> = ({ ticket, winners }) => {
+  const getWinTypeLabel = (winType: string): string => {
+	switch (winType) {
+	  case 'early_five': return 'Early Five';
+	  case 'top_line': return 'Top Line';
+	  case 'middle_line': return 'Middle Line';
+	  case 'bottom_line': return 'Bottom Line';
+	  case 'four_corners': return 'Four Corners';
+	  case 'full_house': return 'Full House';
+	  default: return winType;
+	}
+  };
+
+  return (
+	<div className="tambola-ticket">
+	  <div className="ticket-header">
+		<h3>{ticket.id}</h3>
+		{winners.length > 0 && (
+		  <div className="winners-list">
+			{winners.map((winner, index) => (
+			  <span key={index} className={`win-badge ${winner.type}`}>
+				🏆 {getWinTypeLabel(winner.type)}
+			  </span>
+			))}
+		  </div>
+		)}
+	  </div>
+	  
+	  <div className="ticket-grid">
+		{ticket.numbers.map((row, rowIndex) => (
+		  <div key={rowIndex} className="ticket-row">
+			{row.map((number, colIndex) => (
+			  <div 
+				key={`${rowIndex}-${colIndex}`} 
+				className={`ticket-cell ${
+				  number === null ? 'empty' : 
+				  ticket.striked[rowIndex][colIndex] ? 'striked' : 'number'
+				}`}
+			  >
+				{number !== null ? number : ''}
+			  </div>
+			))}
+		  </div>
+		))}
+	  </div>
+	</div>
+  );
+};
+
+export default TambolaTicketComponent;
