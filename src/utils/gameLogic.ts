@@ -1,4 +1,5 @@
 import { TambolaTicket, WinType } from '../types';
+import { getBingoCallout, getRandomCallout, BingoCallout } from '../data/bingoCallouts';
 
 /**
  * Generates a Tambola ticket with exactly 15 random numbers (5 per row)
@@ -216,3 +217,9 @@ export const checkWinConditions = (ticket: TambolaTicket): WinType[] => {
   
   return wins;
 };
+
+/**
+ * Export bingo callout functions for use throughout the app
+ */
+export { getBingoCallout, getRandomCallout };
+export type { BingoCallout };

@@ -39,6 +39,48 @@
   margin-top: 10px;
 }
 
+/* Bingo Callout Styles */
+.bingo-callout {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.callout-main {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.callout-response {
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #ffd700;
+  font-weight: 500;
+}
+
+.callout-alternatives {
+  font-size: 1em;
+  margin: 8px 0;
+  color: #e8f5e8;
+  font-weight: 400;
+}
+
+.callout-explanation {
+  font-size: 0.9em;
+  opacity: 0.9;
+  font-style: italic;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
 .winners-section {
   background: rgba(76, 175, 80, 0.1);
   border-radius: 8px;
@@ -114,36 +156,65 @@
 
 .recent-numbers {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 8px;
   padding: 15px;
   background: #f8f9fa;
   border-radius: 8px;
   border: 2px solid #dee2e6;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.recent-number-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.recent-number-item.current {
+  background: #ff6b35;
+  color: white;
+  border-color: #e55100;
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
 }
 
 .recent-number {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  background: #fff;
-  border: 2px solid #ddd;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
   font-weight: bold;
-  font-size: 1.2em;
-  color: #333;
-  transition: all 0.3s ease;
+  font-size: 1.1em;
+  flex-shrink: 0;
 }
 
-.recent-number.current {
-  background: #ff6b35;
+.recent-number-item.current .recent-number {
+  background: white;
+  color: #ff6b35;
+}
+
+.recent-callout {
+  flex: 1;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #555;
+  text-align: left;
+}
+
+.recent-number-item.current .recent-callout {
   color: white;
-  border-color: #e55100;
-  transform: scale(1.15);
-  animation: pulse 1s infinite;
-  box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+  font-weight: 600;
 }
 
 .no-numbers {

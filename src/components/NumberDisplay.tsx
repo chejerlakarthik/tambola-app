@@ -1,11 +1,17 @@
 import React from 'react';
 import { Winner } from '../types';
+import { getBingoCallout, getRandomCallout } from '../utils/gameLogic';
 import './NumberDisplay.css';
 
 interface NumberDisplayProps {
   currentNumber: number | null;
   calledNumbers: number[];
   winners: Winner[];
+}
+
+interface RecentCallout {
+  number: number;
+  callout: string;
 }
 
 const NumberDisplay: React.FC<NumberDisplayProps> = ({ currentNumber, calledNumbers, winners }) => {
@@ -21,6 +27,24 @@ const NumberDisplay: React.FC<NumberDisplayProps> = ({ currentNumber, calledNumb
 	}
   };
 
+  // Get current bingo callout
+  const getCurrentCallout = () => {
+    if (currentNumber === null) return null;
+    const callout = getBingoCallout(currentNumber);
+    return callout;
+  };
+
+  // Get recent callouts for display
+  const getRecentCallouts = (): RecentCallout[] => {
+    return calledNumbers.slice(-5).reverse().map(number => ({
+      number,
+      callout: getRandomCallout(number)
+    }));
+  };
+
+  const currentCallout = getCurrentCallout();
+  const recentCallouts = getRecentCallouts();
+
   return (
 	<div className="number-display">
 	  <div className="current-number-section">
@@ -28,6 +52,30 @@ const NumberDisplay: React.FC<NumberDisplayProps> = ({ currentNumber, calledNumb
 		<div className="current-number">
 		  {currentNumber !== null ? currentNumber : '---'}
 		</div>
+		
+		{currentCallout && (
+		  <div className="bingo-callout">
+			<div className="callout-main">
+			  "{currentCallout.primary}"
+			</div>
+			{currentCallout.alternatives && currentCallout.alternatives.length > 0 && (
+			  <div className="callout-alternatives">
+				Also known as: {currentCallout.alternatives.join(', ')}
+			  </div>
+			)}
+			{currentCallout.response && (
+			  <div className="callout-response">
+				<em>Response: {currentCallout.response}</em>
+			  </div>
+			)}
+			{currentCallout.explanation && (
+			  <div className="callout-explanation">
+				{currentCallout.explanation}
+			  </div>
+			)}
+		  </div>
+		)}
+		
 		<div className="game-stats">
 		  Numbers Called: {calledNumbers.length}/90
 		</div>
@@ -48,14 +96,15 @@ const NumberDisplay: React.FC<NumberDisplayProps> = ({ currentNumber, calledNumb
 	  )}
 
   <div className="called-numbers-section">
-	<h3>Recent Numbers</h3>
+	<h3>Recent Numbers & Callouts</h3>
 	<div className="recent-numbers">
-	  {calledNumbers.slice(-5).reverse().map((number, index) => (
-		<span key={index} className={`recent-number ${
-		  number === currentNumber ? 'current' : ''
+	  {recentCallouts.map((item, index) => (
+		<div key={index} className={`recent-number-item ${
+		  item.number === currentNumber ? 'current' : ''
 		}`}>
-		  {number}
-		</span>
+		  <span className="recent-number">{item.number}</span>
+		  <span className="recent-callout">{item.callout}</span>
+		</div>
 	  ))}
 	  {calledNumbers.length === 0 && (
 		<span className="no-numbers">No numbers called yet</span>
